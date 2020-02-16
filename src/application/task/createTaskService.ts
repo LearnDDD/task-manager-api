@@ -8,7 +8,7 @@ export class CreateTaskService {
     this.taskRepository = taskRepository;
   }
 
-  public async execute(title: string, description: string, taskTypeID: TaskTypeID, parentTaskID: TaskID): Promise<Task> {
+  public async execute(title: string, description?: string, taskTypeID?: TaskTypeID, parentTaskID?: TaskID): Promise<Task> {
     let taskID: TaskID = await this.taskRepository.generateID();
     let task: Task = new Task(taskID, title, description, taskTypeID, parentTaskID);
     return this.taskRepository.store(task);

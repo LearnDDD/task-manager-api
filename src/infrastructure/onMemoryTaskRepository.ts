@@ -18,7 +18,7 @@ export class OnMemoryTaskRepository implements TaskRepository {
   }
 
   async store(task: Task): Promise<Task> {
-    this.map.set(task.getID().getValue(), task);
+    this.map.set(task.id.value, task);
     return task;
   }
 }

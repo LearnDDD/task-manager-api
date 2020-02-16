@@ -1,10 +1,10 @@
 import express from 'express';
 import * as Infra from '@/infrastructure';
-import { TaskController } from './task/taskController';
+import { validator, CreateTaskController } from './task/createTask';
 
 let router = express.Router()
 
-const taskController = new TaskController(Infra.onMemoryTaskRepository);
-router.get('/task', taskController.createTask)
+const createTaskController = new CreateTaskController(Infra.onMemoryTaskRepository);
+router.post('/task/create', validator, createTaskController.execute.bind(createTaskController));
 
 export default router
