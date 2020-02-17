@@ -24,11 +24,9 @@ export const validator = [
 ]
 
 export class CreateTaskController {
-  private readonly repository: TaskRepository;
   private readonly createTaskService: CreateTaskService;
 
   constructor(repository: TaskRepository) {
-    this.repository = repository;
     this.createTaskService = new CreateTaskService(repository);
   }
 
