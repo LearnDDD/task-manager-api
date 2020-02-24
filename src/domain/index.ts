@@ -1,4 +1,5 @@
 export * from './utils';
+export * from './error';
 
 export * from './models/entity';
 export * from './models/task';

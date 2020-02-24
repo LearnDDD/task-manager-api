@@ -1,7 +1,7 @@
-import { TaskRepository, CreateTaskService } from '@/application';
+import { TaskRepository, CreateTaskService, TaskTypeRepository, NotFoundTaskTypeError } from '@/application';
 import * as Express from "express";
 import { check, validationResult } from "express-validator";
-import { map, TaskTypeID, TaskID } from '@/domain';
+import { map, TaskTypeID, TaskID, ApplicationError } from '@/domain';
 import * as taskFormatter from './taskFormatter';
 
 export const validator = [
@@ -26,8 +26,8 @@ export const validator = [
 export class CreateTaskController {
   private readonly createTaskService: CreateTaskService;
 
-  constructor(repository: TaskRepository) {
-    this.createTaskService = new CreateTaskService(repository);
+  constructor(taskRepository: TaskRepository, taskTypeRepository: TaskTypeRepository) {
+    this.createTaskService = new CreateTaskService(taskRepository, taskTypeRepository);
   }
 
   public async execute(req: Express.Request, res: Express.Response, next: Express.NextFunction) {
@@ -35,12 +35,19 @@ export class CreateTaskController {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const createdTask = await this.createTaskService.execute(
-      req.body.title
-      , req.body.description
-      , map(e => new TaskTypeID(e), req.body.taskTypeID)
-      , map(e => new TaskID(e), req.body.parentTaskID)
-    ).then(taskFormatter.toJSON);
-    res.send(createdTask);
+    try {
+      const createdTask = await this.createTaskService.execute(
+        req.body.title
+        , req.body.description
+        , map(e => new TaskTypeID(e), req.body.taskTypeID)
+        , map(e => new TaskID(e), req.body.parentTaskID)
+      ).then(taskFormatter.toJSON);
+      return res.send(createdTask);
+    } catch(error) {
+      if (error instanceof NotFoundTaskTypeError) {
+        return res.status(400).json({ error: error.message });
+      }
+      return res.status(500).json({ error: error.message });
+    }
   }
 }
