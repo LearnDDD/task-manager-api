@@ -1,8 +1,9 @@
-import { TaskRepository, CreateTaskService, TaskTypeRepository, NotFoundTaskTypeError } from '@/application';
+import { TaskRepository, CreateTaskService, TaskTypeRepository, NotFoundTaskTypeError, LogLevel } from '@/application';
 import * as Express from "express";
 import { check, validationResult } from "express-validator";
 import { map, TaskTypeID, TaskID, ApplicationError } from '@/domain';
 import * as taskFormatter from './taskFormatter';
+import { logger } from '@/infrastructure';
 
 export const validator = [
   check('title')
@@ -43,10 +44,20 @@ export class CreateTaskController {
         , map(e => new TaskID(e), req.body.parentTaskID)
       ).then(taskFormatter.toJSON);
       return res.send(createdTask);
-    } catch(error) {
+    } catch (error) {
       if (error instanceof NotFoundTaskTypeError) {
+        logger.log(LogLevel.fatal
+          , 'Task creation failed.'
+          , error
+          , {
+            'title': req.body.title,
+            'description': req.body.description,
+            'taskTypeID': req.body.taskTypeID,
+            'parentTaskID': req.body.parentTaskID,
+          });
         return res.status(400).json({ error: error.message });
       }
+      logger.log(LogLevel.fatal, 'Task creation failed.', error);
       return res.status(500).json({ error: error.message });
     }
   }

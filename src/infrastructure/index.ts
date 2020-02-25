@@ -1,7 +1,9 @@
 import { OnMemoryTaskRepository } from './onMemory/onMemoryTaskRepository';
 import { OnMemoryTaskTypeRepository } from './onMemory/onMemoryTaskTypeRepository';
+import { TaskRepository, TaskTypeRepository, Logger } from '@/application';
+import { Log4JSLogger } from './log4js/logging';
 
-export let onMemoryTaskRepository: OnMemoryTaskRepository = OnMemoryTaskRepository.create();
-export let onMemoryTaskTypeRepository: OnMemoryTaskTypeRepository = new OnMemoryTaskTypeRepository();
+export let logger: Logger = new Log4JSLogger();
 
-export * from './onMemory/onMemoryTaskRepository';
+export let taskRepository: TaskRepository = OnMemoryTaskRepository.create();
+export let taskTypeRepository: TaskTypeRepository = new OnMemoryTaskTypeRepository();

@@ -1,3 +1,5 @@
+export * from './logging';
+
 // Task
 export * from './task/taskRepository';
 export * from './task/createTaskService';
