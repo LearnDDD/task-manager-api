@@ -1,17 +1,17 @@
 import { TaskRepository } from '@/application';
 import { TaskTypeID, TaskID, Task, ApplicationError } from '@/domain';
 import { TaskTypeRepository } from '../taskType/taskTypeRepository';
+import { injectable, inject } from 'inversify';
+import TYPES from '../types';
 
 export class NotFoundTaskTypeError extends ApplicationError { }
 
+@injectable()
 export class CreateTaskService {
-  private readonly taskRepository: TaskRepository;
-  private readonly taskTypeRepository: TaskTypeRepository;
-
-  constructor(taskRepository: TaskRepository, taskTypeRepository: TaskTypeRepository) {
-    this.taskRepository = taskRepository;
-    this.taskTypeRepository = taskTypeRepository;
-  }
+  @inject(TYPES.TaskRepository)
+  private readonly taskRepository!: TaskRepository;
+  @inject(TYPES.TaskTypeRepository)
+  private readonly taskTypeRepository!: TaskTypeRepository;
 
   public async execute(title: string, description?: string, taskTypeID?: TaskTypeID, parentTaskID?: TaskID): Promise<Task> {
     let taskID: TaskID = await this.taskRepository.generateID();

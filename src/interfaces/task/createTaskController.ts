@@ -1,9 +1,11 @@
-import { TaskRepository, CreateTaskService, TaskTypeRepository, NotFoundTaskTypeError, LogLevel } from '@/application';
+import { CreateTaskService, LogLevel, NotFoundTaskTypeError, TaskRepository, TaskTypeRepository } from '@/application';
+import TYPES from '@/application/types';
+import { map, TaskID, TaskTypeID } from '@/domain';
+import { logger } from '@/infrastructure';
 import * as Express from "express";
 import { check, validationResult } from "express-validator";
-import { map, TaskTypeID, TaskID, ApplicationError } from '@/domain';
+import { injectable, inject } from 'inversify';
 import * as taskFormatter from './taskFormatter';
-import { logger } from '@/infrastructure';
 
 export const validator = [
   check('title')
@@ -24,12 +26,10 @@ export const validator = [
     .notEmpty().withMessage('parentTaskID is empty.'),
 ]
 
+@injectable()
 export class CreateTaskController {
-  private readonly createTaskService: CreateTaskService;
-
-  constructor(taskRepository: TaskRepository, taskTypeRepository: TaskTypeRepository) {
-    this.createTaskService = new CreateTaskService(taskRepository, taskTypeRepository);
-  }
+  @inject(TYPES.CreateTaskService)
+  private readonly createTaskService!: CreateTaskService;
 
   public async execute(req: Express.Request, res: Express.Response, next: Express.NextFunction) {
     const errors = validationResult(req);

@@ -1,6 +1,8 @@
 import { TaskTypeRepository } from '@/application';
-import { TaskType, TaskTypeID } from '@/domain';
+import { TaskTypeID } from '@/domain';
+import { injectable } from 'inversify';
 
+@injectable()
 export class OnMemoryTaskTypeRepository implements TaskTypeRepository {
   async exists(taskTypeID: TaskTypeID): Promise<boolean> {
     return false;

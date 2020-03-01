@@ -1,10 +1,12 @@
 import express from 'express';
-import * as Infra from '@/infrastructure';
-import { validator, CreateTaskController } from './task/createTask';
+import "reflect-metadata";
+import * as Controllers from './controllers';
+import { validator } from './task/createTaskController';
 
 let router = express.Router();
 
-const createTaskController = new CreateTaskController(Infra.taskRepository, Infra.taskTypeRepository);
-router.post('/task/create', validator, createTaskController.execute.bind(createTaskController));
+router.post('/task/create', validator, (req: express.Request, res: express.Response, next: express.NextFunction) =>
+  Controllers.createTaskController.execute(req, res, next)
+);
 
 export default router;

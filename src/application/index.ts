@@ -1,4 +1,5 @@
 export * from './logging';
+export * from './types';
 
 // Task
 export * from './task/taskRepository';
