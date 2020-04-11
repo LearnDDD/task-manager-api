@@ -26,6 +26,6 @@ app.use(function (req, res, next) {
 });
 app.use('/', router);
 
-app.listen(3000, () => logger.log(LogLevel.info, 'listening on port 3000'));
+app.listen(3000, () => logger.log(LogLevel.info, 'listening on port 3000. http://localhost:3000'));
 
 export default app;
