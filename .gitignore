@@ -4,6 +4,7 @@ node_modules
 /logs
 /src/**/*.js
 /src/**/*.js.map
+/tools/docker/db/mysql_data/
 
 # local env files
 .env.local

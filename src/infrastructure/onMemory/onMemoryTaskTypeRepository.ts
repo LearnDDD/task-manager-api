@@ -5,6 +5,6 @@ import { injectable } from 'inversify';
 @injectable()
 export class OnMemoryTaskTypeRepository implements TaskTypeRepository {
   async exists(taskTypeID: TaskTypeID): Promise<boolean> {
-    return false;
+    return true;
   }
 }

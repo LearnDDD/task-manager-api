@@ -57,7 +57,8 @@ export class Log4JSLogger implements Logger {
       errorJson.set('Message', error.message);
       if (error.datas !== null && error.datas !== undefined) {
         errorJson.set('Datas', error.datas);
-      }
+      };
+      errorJson.set('Stack', error.stack);
       json.set('Error', Object.fromEntries(errorJson));
     }
     if (data !== null && data !== undefined) {
