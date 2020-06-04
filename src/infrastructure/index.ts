@@ -1,5 +1,5 @@
-import { OnMemoryTaskRepository } from './onMemoryTaskRepository';
+import { Logger } from '@/application';
+import { Log4JSLogger } from './log4js/logging';
+export * from './mysql/types';
 
-export let onMemoryTaskRepository: OnMemoryTaskRepository = OnMemoryTaskRepository.create();
-
-export * from './onMemoryTaskRepository';
+export let logger: Logger = new Log4JSLogger();
